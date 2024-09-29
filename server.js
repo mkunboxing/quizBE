@@ -21,6 +21,9 @@ app.use(cors());
 // Connect to MongoDB
 connectDB();
 
+app.get('/', (req, res) => {
+  res.status(200).json({ message: 'Hello Quiz' });
+});
 // Routes
 app.use('/api/cards', cardRoutes);
 app.use('/api/question', quizRoutes);
