@@ -1,5 +1,6 @@
 const Answer = require('../models/userAnswer');
 const Questions = require('../models/Questions');
+const User = require('../models/User');
 
 const submitAnswer = async (req, res) => {
   const { userId, cardId, questionId, userSelectedOption, takenTime } = req.body;
@@ -111,6 +112,56 @@ const getTotalPointsAndUserName = async (req, res) => {
   }
 };
 
+// Add points to the user's total points
+const addPointsToUser = async (req, res) => {
+  const { userId, pointsToAdd } = req.body; // Assuming userId and pointsToAdd are sent in the request body
+  try {
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found', success: false });
+    }
+    user.totalPoints += pointsToAdd;
+    await user.save();
+    res.status(200).json({
+      message: 'Points added successfully',
+      success: true,
+      data: {
+        userId: user._id,
+        userName: user.fname,
+        totalPoints: user.totalPoints,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message, success: false });
+  }
+};
+
+const getUserPoints = async (req, res) => {
+  const { userId } = req.params; // Assuming userId is passed as a URL parameter
+
+  try {
+    // Find the user by userId
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found', success: false });
+    }
+
+    // Return the total points of the user
+    res.status(200).json({
+      message: 'User points fetched successfully',
+      success: true,
+      data: {
+        userId: user._id,
+        userName: user.fname,
+        totalPoints: user.totalPoints,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message, success: false });
+  }
+};
+
 
 
 
@@ -119,4 +170,6 @@ module.exports = {
   submitAnswer,
   getQuestionReview,
   getTotalPointsByCard: getTotalPointsAndUserName,
+  addPointsToUser,
+  getUserPoints,
 };
