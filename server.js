@@ -13,7 +13,7 @@ const http = require('http').createServer(app);
 // Socket.IO setup
 const io = require('socket.io')(http, {
   cors: {
-    origin: ["http://localhost:3000", "https://quizy-orcin.vercel.app"],
+    origin: ["http://localhost:3000", "https://quizy-orcin.vercel.app", "https://quizy1.vercel.app"],
     methods: ["GET", "POST"]
   }
 });
@@ -21,7 +21,7 @@ const io = require('socket.io')(http, {
 // Middleware
 app.use(express.json());
 app.use(cors({
-  origin: ['http://localhost:3000', 'https://quizy-orcin.vercel.app'],
+  origin: ['http://localhost:3000', 'https://quizy-orcin.vercel.app', 'https://quizy1.vercel.app'],
   credentials: true
 }));
 
