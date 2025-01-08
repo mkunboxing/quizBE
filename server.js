@@ -13,16 +13,25 @@ const http = require('http').createServer(app);
 // Socket.IO setup
 const io = require('socket.io')(http, {
   cors: {
-    origin: "*",
+    origin: ["*"],
+
+    handlePreflightRequest: (req, res) => {
+      res.writeHead(200, {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET,POST,PUT,DELETE,OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type, Authorization"
+      });
+      res.end();
+    }
     // origin: ["http://localhost:3000", "https://quizy-orcin.vercel.app", "https://quizy1.vercel.app"],
-    methods: ["GET", "POST"]
+    // methods: ["GET", "POST"]
   }
 });
 
 // Middleware
 app.use(express.json());
 app.use(cors({
-  origin: "*",
+  origin: ["*"],
   // origin: ['http://localhost:3000', 'https://quizy-orcin.vercel.app', 'https://quizy1.vercel.app'],
   credentials: true
 }));
